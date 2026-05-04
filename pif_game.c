@@ -1,16 +1,12 @@
 #include<stdio.h>
 #include <stdlib.h>
-#include "include/raylib/src/raylib.h"
+#include "raylib/raylib/src/raylib.h"
+#include <math.h>
+//#include <functions/utilis.h>
 
-// para compilar:  gcc pif_game.c -o pif_game -Iinclude/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 && ./pif_game
-/* pros outros é mais fácil. posso isolar o moviento do cavalo. numa função
-    P = peao
-    r = rei
-    R =rainha
-    T=torre
-    B=bispo
-    C=cavalo*/
-    
+#include "raylib/raylib/src/raudio.c"
+#define power2(A) ((A)*(A))
+  
 typedef struct{
     char pecas_jogador;
     int px;
@@ -19,42 +15,52 @@ typedef struct{
     int defesa;
     int ataque;
     int time;
+    int isDame;
 }pecas;
+//77 max y
+// 0 min y
 
-int quant_pecas = 16;
 
-void ataque_pecas(pecas *jogador, int unity_control, int reverse_border){
-    if (unity_control<=7|| unity_control==12)
-                jogador[unity_control].px += (1*reverse_border);
-    if (unity_control==8 || unity_control==15|| unity_control==11)
-                jogador[unity_control].px += (reverse_border*5);
-    if (unity_control==9 || unity_control==14)
-                movimento_cavalo(jogador,unity_control,reverse_border);
-    if (unity_control==10 || unity_control==13){
-                jogador[unity_control].px += (reverse_border*5);
-                jogador[unity_control].py += (reverse_border*5);
-    }
+int distance_2_points(Vector4 jogadores_coordenadas){
+    return (sqrt(power2(jogadores_coordenadas.x-jogadores_coordenadas.z) + power2(jogadores_coordenadas.y-jogadores_coordenadas.w)));
 }
 
- void movimento_cavalo(pecas *jogador , int unity_control, int reverse_border){
-    if (IsKeyDown(KEY_RIGHT)){    
-        jogador[unity_control].px -= 3;
-        jogador[unity_control].py += 2;
-    }
-    if (IsKeyDown(KEY_DOWN)){
-        jogador[unity_control].px -= 3;
-        jogador[unity_control].py -= 2;
-    }
-    if (IsKeyDown(KEY_UP)){
-        jogador[unity_control].py += 3;
-        jogador[unity_control].px += 2;
-        
-    }
-    if (IsKeyDown(KEY_LEFT)){
-        jogador[unity_control].px += 3;
-        jogador[unity_control].py += 2;
-    }
+int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i){
+    Vector4 jogadores_coord = {jogador1[unity_control].px,jogador1[unity_control].py,jogador2[i].px,jogador2[i].py};    
+    int valor = distance_2_points(jogadores_coord);
+    if (valor<=7)
+            return 1;
+    else
+            return 0;
 }
+       
+
+int virar_rainha(pecas *jogador1,int unity_control, Vector4 barreiras){
+    if  (jogador1[unity_control].py > barreiras.y || jogador1[unity_control].py < barreiras.w){
+        jogador1[unity_control].pecas_jogador = 'D';
+        jogador1[unity_control].vida= 200;
+        jogador1[unity_control].defesa =  20;
+        jogador1[unity_control].ataque  = 40;
+        return 2;
+    }
+    return 1;
+}
+
+/*
+void ataque_pecas(pecas *jogador1, int unity_control, int reverse_border){
+    int dx[] = {-1, 1, -1, 1};
+    int dy[] = {-1, -1, 1, 1};
+    
+    Vector2 AttackPosition = GetMousePosition();
+    Vector4 jogadores_ataque = {jogador1[unity_control].px,jogador1[unity_control].py,AttackPosition.x,AttackPosition.y};
+    
+
+    
+
+
+
+   }
+*/
 
 pecas *allocar_memoria(int quantidade){
     pecas *aux = malloc(quantidade*sizeof(pecas));
@@ -63,283 +69,203 @@ pecas *allocar_memoria(int quantidade){
     return aux;
 }
 
-void movimentopecas(pecas *jogador, int unity_control, int reverse_border){
+void movimentopecas(pecas *jogador, int unity_control, int reverse_border, int IsDame){
     if (IsKeyDown(KEY_RIGHT)){
-                    if (unity_control<=7|| unity_control==12)
-                        jogador[unity_control].px += ( (unity_control==12 )? (1*reverse_border) : (0));
-                    if (unity_control==8 || unity_control==15|| unity_control==11)
-                        jogador[unity_control].px += (reverse_border*5);
-                    if (unity_control==9 || unity_control==14)
-                        movimento_cavalo(jogador,unity_control,reverse_border);
-                    if (unity_control==10 || unity_control==13){
-                            jogador[unity_control].px += (reverse_border*5);
-                            jogador[unity_control].py += (reverse_border*5);
+                            jogador[unity_control].px += (reverse_border*IsDame);
+                            jogador[unity_control].py += (reverse_border*IsDame);
                     }
-                }
-    else if (IsKeyDown(KEY_LEFT)){
-                    if (unity_control<=7 || unity_control==12)
-                        jogador[unity_control].px -= ( (unity_control==12 )? (1*reverse_border) : (0));
-                    if (unity_control==8 || unity_control==15 || unity_control==11)
-                        jogador[unity_control].px -= (reverse_border*5);
-                    if (unity_control==9 || unity_control==14)
-                        movimento_cavalo(jogador,unity_control,reverse_border);
-                    if (unity_control==10 || unity_control==13){
-                        jogador[unity_control].px -= (reverse_border*5);
-                        jogador[unity_control].py -= (reverse_border*5);
-                    }
+    else if (IsKeyDown(KEY_LEFT)){                
+                        jogador[unity_control].px -= (reverse_border*IsDame);
+                        jogador[unity_control].py -= (reverse_border*IsDame);     
                 }
     else if (IsKeyDown(KEY_UP)){
-                    if (unity_control<=7|| unity_control==12)
-                        jogador[unity_control].py -= (reverse_border*1);
-                    if (unity_control==8 || unity_control==15|| unity_control==11)
-                        jogador[unity_control].py -= (reverse_border*5);
-                    if (unity_control==9 || unity_control==14)
-                        movimento_cavalo(jogador,unity_control,reverse_border);
-                    if (unity_control==10 || unity_control==13){
-                            jogador[unity_control].px += (reverse_border*5);
-                            jogador[unity_control].py -= (reverse_border*5);
-                    }
+                            jogador[unity_control].px += (reverse_border*IsDame);
+                            jogador[unity_control].py -= (reverse_border*IsDame);
                 } 
     else if (IsKeyDown(KEY_DOWN)){
-                    if (unity_control<=7|| unity_control==12)
-                        jogador[unity_control].py += (reverse_border*1);
-                    if (unity_control==9 || unity_control==14)
-                        movimento_cavalo(jogador,unity_control,reverse_border);
-                    if (unity_control==8 || unity_control==15|| unity_control==11)
-                        jogador[unity_control].py += (reverse_border*5);
-                    if (unity_control==10 || unity_control==13){
-                            jogador[unity_control].px -= (reverse_border*5);
-                            jogador[unity_control].py += (reverse_border*5);
+                            jogador[unity_control].px -= (reverse_border*IsDame);
+                            jogador[unity_control].py += (reverse_border*IsDame);
                         }
-                    }
 }
 
-void setpecas(pecas *jogador,int quant_pecas,int time){
+void setpecas(pecas *jogador,int time, int quant_pecas){
     for(int i=0;i<quant_pecas;i++){
-        if(i<=7){
-            jogador[i].pecas_jogador = 'P';
+        if(i<quant_pecas){
+            if (i<quant_pecas && i>=quant_pecas-4)
+                jogador[i].pecas_jogador = 'R';
+            else{
+                jogador[i].pecas_jogador = ((i>=0 && i<=3)?  'E': 'N');
+            }
             jogador[i].vida= 100;
             jogador[i].defesa =  5;
             jogador[i].ataque  = 20;
         }
-        if (i==8 || i==15){
-            jogador[i].pecas_jogador= 'T';
-            jogador[i].vida = 250;
-            jogador[i].defesa = 20;
-            jogador[i].ataque  = 50;
-        }
-        if (i==10 || i==13){
-            jogador[i].pecas_jogador='B';
-            jogador[i].vida = 80;
-            jogador[i].defesa = 17;
-            jogador[i].ataque  = 45;
-        }
-        if (i==11){
-            jogador[i].pecas_jogador = 'R';
-            jogador[i].vida = 180;
-            jogador[i].defesa = 10;
-            jogador[i].ataque  = 75;
-        }
-        if (i==12){
-            jogador[i].pecas_jogador = 'r';
-            jogador[i].vida = 350;
-            jogador[i].defesa = 15;
-            jogador[i].ataque  = 10;
-        }
-        if (i==9 || i==14){
-            jogador[i].pecas_jogador = 'C';
-            jogador[i].vida = 150;
-            jogador[i].defesa = 10;
-            jogador[i].ataque  = 35;
-        }
-        jogador[i].px = (25) * ((i<=7) ? i+1 : i-7);
+        jogador[i].px = (25) * ((i<=(quant_pecas/2)-1) ? i+1 : i-((quant_pecas/2)-1));
         if (time ==1)
-            jogador[i].py = (10) * (((i<=7)? 1 : 0));
+            jogador[i].py = (10) * (((i<=(quant_pecas/2)-1)? 1 : 0));
         else
-            jogador[i].py = (30) * (((i<=7)? 2 : 2.5));
+            jogador[i].py = (30) * (((i<=(quant_pecas/2)-1)? 2 : 2.5));
         jogador[i].time = time;
+        jogador[i].isDame=1;
     }
 }
 
-void loop_movimento(int quant_pecas,int *unity_control){
+
+
+
+void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int unity_control,int quant_pecas ){
+    
+    for(int i = 0;i<quant_pecas;i++){ 
+        if((pos_ocupada(jogador1, jogador2, unity_control,quant_pecas,i))){
+            jogador1[unity_control].px = dados_anteriores.x;
+            jogador1[unity_control].py = dados_anteriores.y;
+        }
+    }
+   
+}
+
+
+void loop_movimento(int *unity_control, int quant_pecas){
     for (int i=0x0;i<quant_pecas;i++){
         if ((IsKeyDown(KEY_ZERO+i)) )
                     *unity_control = i;
-        if ((IsKeyDown(KEY_A+i)))
+        if (i<2 &&(IsKeyDown(KEY_A+i)))
                     *unity_control = (10+i);
     }
 }
 
-/*
-J1:
-0 - 25,10
-1 - 50,10
-2 - 75,10
-3 - 100,10
-4 - ...,10
-5 - ...,10
-6 - ...,10
-7 - ...,10
-8 - 25,0
-9 - 50,0
-10 - ...
-11 - ...
-12 - ...
-13 - ...
-14 - ...
-15 - ...
-
-
-(8 - 7) * -25 = -8*25 +25*7  
-J2:
-0 - -25,-10
-1 - -50,-10
-2 - -...
-3 - ...
-4 - ...
-5 - ... 
-6 - ... 
-7 - ...
-8 - -25,0
-9 -
-10 -
-11 -
-12 -
-13 -
-14 -
-15 -
-
-
-*/
-
-
-
-int main(void)
-{
+int main(void){
+    ChangeDirectory(GetApplicationDirectory());
     // Initialization
     //--------------------------------------------------------------------------------------
+    
     const int screenWidth = 1200;
     const int screenHeight = 850;
-    const int quant_pecas = 0x10;
     const int max_speed_x = 5;
     const int max_speed_y = 5;
     const int width_print = 60;
+    const int quant_pecas = 0xC;
     const int height_print = 20;
+    const int table_max_x = 150, table_min_x = 23,table_max_y = 77, table_min_y = 0;
+ 
+    
     //Image table= {"/home/devcontainers/dev/Pif_Jogo/00_2c5cd.webp",screenWidth,screenHeight,1,"RGB"};
-    InitWindow(screenWidth, screenHeight, "malloc(chess): teste 1.5.7.2");
+    InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 1.7.7.2");
     pecas *jogador1 = allocar_memoria(quant_pecas);
-    setpecas(jogador1,quant_pecas,1);
+    setpecas(jogador1,1,quant_pecas);
+    Vector4 barreiras = {table_max_x,table_max_y,table_min_x,table_min_y};
     pecas *jogador2 = allocar_memoria(quant_pecas);
-    setpecas(jogador2,quant_pecas,-1);
-
-    int unity_control = 0;
-
-    Image tabuleiro = LoadImage("/home/devcontainers/dev/Pif_Jogo/00_2c5cd_(1).png");
-   
-    Rectangle matrix_jogo = {5*jogador1[quant_pecas/2].px, 5*jogador2[quant_pecas/2].py,14,(5*jogador1[quant_pecas/2].py)-(5*jogador2[quant_pecas-1].py)};
-    //Rectangle matrix_jogo2 = {5*jogador1[quant_pecas/2].px,5*jogador1[quant_pecas-1].py, 5*jogador1[quant_pecas-1].px, 5*jogador2[quant_pecas/2].py};
+    setpecas(jogador2,-1,quant_pecas);
+    int control1 = 0;
+    int control2=0;
+    //Texture2D tabuleiro = LoadImage("/home/devcontainers/dev/Pif_Jogo/teste.png");
     int time_jogando = 1 ;
-    /*
-    preciso
-    jogador1[quant_pecas/2].px                          jogador1[quant_pecas-1].px         
     
- 5*(jogador2[quant_pecas-1].px), 5*(jogador2[quant_pecas-1].py)
-
-
-    jogador2[quant_pecas/2].px                          jogador2[quant_pecas-1].px
+    Texture2D texture = LoadTexture("/home/devcontainers/dev/Pif_Jogo/teste.png");          
     
-    */
-
-    Texture2D texture = LoadTextureFromImage(tabuleiro);          
-
     SetTargetFPS(60);               
     //--------------------------------------------------------------------------------------
     // Main game loop
-    while (!WindowShouldClose())    
-    { 
-        
-        //DrawRectangleLinesEx(matrix_jogo,1.2,BLACK);
-        //DrawRectangleRec(matrix_jogo,WHITE);
-        for(int u_c = 0;u_c<quant_pecas;u_c++){
-                DrawRectangle(5*(jogador1[u_c].px), 5*(jogador1[u_c].py),width_print,height_print,BLACK);
-                DrawText(TextFormat("%c %d",jogador1[u_c].pecas_jogador, u_c), 5*jogador1[u_c].px, 5*jogador1[u_c].py, height_print, WHITE);
-        }
-        for(int u_c2=0;u_c2<quant_pecas;u_c2++){
-                DrawRectangle(5*(jogador2[u_c2].px), 5*(jogador2[u_c2].py),60,20,DARKGRAY);
-                DrawText(TextFormat("%c %d",jogador2[u_c2].pecas_jogador, u_c2), 5*jogador2[u_c2].px, 5*jogador2[u_c2].py, height_print, WHITE);
-        }
-
-        
-        //DrawRectangleLinesEx(matrix_jogo2,1.2,BLACK);
-            
-
+    while (!WindowShouldClose()){ 
             // Update
-            loop_movimento(quant_pecas,&unity_control);
 
-            Vector2 coordenadas_peca={jogador1[unity_control].px,jogador1[unity_control].py};
-            Vector2 coordenadas_peca2={jogador2[unity_control].px,jogador2[unity_control].py};
+            if (time_jogando!= -1)
+                loop_movimento(&control1,quant_pecas); 
+            else
+                loop_movimento(&control2,quant_pecas);
+
+            if (IsKeyDown(KEY_T))
+                time_jogando = -(time_jogando);
+            
+            //Vector4 jogadores_coord = {jogador1[unity_control].px,jogador1[unity_control].py,jogador2[unity_control].px,jogador2[unity_control].py};
+            
+            Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
+            Vector2 coordenadas_peca2={jogador2[control2].px,jogador2[control2].py};
+            /*if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+                Vector2 AttackPosition = GetMousePosition();
+                DrawText(TextFormat("Teste de ataque: %d %d",AttackPosition.x,AttackPosition.y),155,290,15,BLACK);
+            }*/
+
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         
                 /* Definr os limites de movimento, de forma manual para as peças aqui*/
         // Make sure Box B does not go out of move area limits
             
-            
+/*
 
+TIME 2:
+YMAX = 10
+YMIN = 0
+X MIN = 25
+X MAX = 200
 
+TIME 1:
+YMAX = 10
+YMIN = 0
+X MIN = 25
+X MAX = 200
 
-
-
-
-
-
-
-        //if ((coordenadas_peca2.y < matrix_jogo.y && coordenadas_peca2.x < matrix_jogo.x) || (coordenadas_peca.y < matrix_jogo.y && coordenadas_peca.x < matrix_jogo.x) ){
-        
-        //if (!CheckCollisionPointRec(coordenadas_peca,matrix_jogo) && !CheckCollisionPointRec(coordenadas_peca2,matrix_jogo)){
+*/           
             int reverse_boundary = 1;
             if (time_jogando == 1){
-
-
-                if (((coordenadas_peca.x) >= screenWidth || (coordenadas_peca.x <= 0))  ||  ((coordenadas_peca.y) >= screenHeight || (coordenadas_peca.y <= 0)) ) 
+                if (((coordenadas_peca.x) < table_min_x || (coordenadas_peca.x > table_max_x))  ||  (((coordenadas_peca.y < table_min_y) || (coordenadas_peca.y) > table_max_y)) ) 
                     reverse_boundary = -1;
-                movimentopecas(jogador1,unity_control,reverse_boundary);
-            }
-            else{
-                if (((coordenadas_peca2.x) >= screenWidth || (coordenadas_peca2.x <= 0)) || ((coordenadas_peca2.y) >= screenHeight || (coordenadas_peca2.y <= 0)) )
-                    reverse_boundary = -1;
-                movimentopecas(jogador2,unity_control,reverse_boundary); 
-                }
-            /*
-            int reverse_boundary = -1;
-            if (time_jogando == 1){
-
+                movimentopecas(jogador1,control1,reverse_boundary,jogador1[control1].isDame);
+                jogador1[control1].isDame = virar_rainha(jogador1,control1,barreiras);
+                //ataque_pecas(jogador1,control1,reverse_boundary);
                 
-                if (((coordenadas_peca.x) < screenWidth || (coordenadas_peca.x > 0))  ||  ((coordenadas_peca.y) < screenHeight || (coordenadas_peca.y > 0)) ) 
-                    reverse_boundary = 1;
-                movimentopecas(jogador1,unity_control,reverse_boundary);
+                /*typedef struct{
+                    pecas *player1; 
+                    pecas *player2; 
+                    Vector2 *coordenadas_peca; 
+                    int *control;
+                    int *pecas_qnt;
+                }context;
+                context cx1 = {&jogador1[control1],&jogador2, &coordenadas_peca,&control1,&quant_pecas};
+
+                //colisao_pecas(cx1);
+                */
+                colisao_pecas(jogador1,jogador2,coordenadas_peca,control1,quant_pecas);
             }
             else{
-                if (((coordenadas_peca2.x) < screenWidth || (coordenadas_peca2.x > 0)) || ((coordenadas_peca2.y) < screenHeight || (coordenadas_peca2.y > 0)) )
-                    reverse_boundary = 1;
-                movimentopecas(jogador2,unity_control,reverse_boundary); 
-                }
+                if (((coordenadas_peca2.x) <  table_min_x || (coordenadas_peca2.x > table_max_x)) || ((coordenadas_peca2.y) < table_min_y || (coordenadas_peca2.y > table_max_y)) )
+                    reverse_boundary = -1;
+                movimentopecas(jogador2,control2,reverse_boundary,jogador2[control2].isDame);
+                jogador2[control2].isDame = virar_rainha(jogador2,control2,barreiras);
+                //ataque_pecas(jogador2,control2,reverse_boundary);
+                colisao_pecas(jogador2,jogador1,coordenadas_peca2,control2,quant_pecas);
+                }           
             
-            
-            */
-        
         //}
         //----------------------------------------------------------------------------------
         
         // Draw
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            DrawTexture(texture, 0, 0 , BLACK);
+            DrawTexture(texture, 0, 0 , WHITE);
+
+            for(int u_c = 0;u_c<quant_pecas;u_c++){
+                DrawRectangle(5*(jogador1[u_c].px), 5*(jogador1[u_c].py),width_print,height_print,BLACK);
+                DrawText(TextFormat("%c %d",jogador1[u_c].pecas_jogador, u_c), 5*jogador1[u_c].px, 5*jogador1[u_c].py, height_print, WHITE);
+            }
+            for(int u_c2=0;u_c2<quant_pecas;u_c2++){
+                DrawRectangle(5*(jogador2[u_c2].px), 5*(jogador2[u_c2].py),width_print,height_print,DARKGRAY);
+                DrawText(TextFormat("%c %d",jogador2[u_c2].pecas_jogador, u_c2), 5*jogador2[u_c2].px, 5*jogador2[u_c2].py, height_print, WHITE);
+            }
+
 
             DrawText("Digite a peça que você quer, depois use o teclado para mover. Selecione T para dar a vez ao outro jogador", 0, 30, 15, BLACK);
-            if (IsKeyDown(KEY_T))
-                time_jogando*=-1;
 
+            //ataque_pecas(jogador1,control1,reverse_boundary);
+
+            DrawText(TextFormat("Peca %d: time: %d, x= %d, y=%d",control1,1,jogador1[control1].px,jogador1[control1].py),0,90,15,BLACK);
+            if (time_jogando == -1)
+                DrawText("Jogador 2!",0,290,15,BLACK);
+            if (time_jogando == 1)
+                DrawText("Jogador 1!",0,290,15,BLACK);
+
+            DrawText(TextFormat("Peca %d: time: %d, x= %d, y=%d",control2,-1,jogador2[control2].px,jogador2[control2].py),0,150,15,BLACK);
             EndDrawing();
         //----------------------------------------------------------------------------------
         }   
@@ -347,7 +273,7 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadImage(tabuleiro);
+    //UnloadImage(tabuleiro);
     UnloadTexture(texture);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

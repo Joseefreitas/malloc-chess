@@ -15,8 +15,14 @@ pif_game
 # --- Dependências e Bibliotecas ---
 # Como você baixou a raylib dentro da pasta include, ignore a pasta toda.
 # O ideal é que o repo tenha apenas o SEU código.
-include/raylib/
-lib/
+# Excluir pastas de bibliotecas e ferramentas
+raylib/
+emsdk/
+bin/
+obj/
+*.exe
+*.o
+.vscode/
 
 # --- IDE e Sistema ---
 .vscode/
