@@ -1,21 +1,25 @@
 #ifndef MEU_JOGO_H
-#define MEU_JOGO_H
+#define MEU_JOGO_H 
+#include "pecas.h"
+#include "raylib.h"
 
+
+int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i);
 
 int virar_rainha(pecas *jogador1,int unity_control, Vector4 barreiras);
 
-void ataque_pecas(pecas *jogador, int unity_control, int reverse_border);
-
-void movimento_cavalo(pecas *jogador , int unity_control, int reverse_border);
-
 pecas *allocar_memoria(int quantidade);
 
-void movimentopecas(pecas *jogador, int unity_control, int reverse_border);
+void movimentopecas(pecas *jogador, int unity_control, int reverse_border, int IsDame);
 
-void setpecas(pecas *jogador,int quant_pecas,int time);
+void matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas);
 
-int pos_ocupada(pecas *jogador1, pecas *jogador2, int quant_pecas, int unity_control, int px, int py);
+void ataque_pecas(pecas *jogador1, pecas*jogador2,int unity_control,int quant_pecas);
 
-void loop_movimento(int quant_pecas,int *unity_control);
+void setpecas(pecas *jogador,int time, int quant_pecas);
+
+void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int unity_control,int quant_pecas );
+
+void loop_movimento(int *unity_control, int quant_pecas);
 
 #endif
