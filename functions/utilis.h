@@ -6,15 +6,17 @@
 
 int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i);
 
+int desabilitar_peca(pecas *jogador,int quant_pecas);
+
 int virar_rainha(pecas *jogador1,int unity_control, Vector4 barreiras);
 
 pecas *allocar_memoria(int quantidade);
 
 void movimentopecas(pecas *jogador, int unity_control, int reverse_border, int IsDame);
 
-void matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas);
+int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas);
 
-void ataque_pecas(pecas *jogador1, pecas*jogador2,int unity_control,int quant_pecas);
+int ataque_pecas(pecas *jogador1, pecas*jogador2,int unity_control,int quant_pecas);
 
 void setpecas(pecas *jogador,int time, int quant_pecas);
 
