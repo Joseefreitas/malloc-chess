@@ -29,16 +29,18 @@ int main(void){
     const int fps = 60;
     const int num_textures = 0;
 
+    int iniciar = 0;
 
-
-    const float max_timer = 7.0f;
-    const float min_timer = 1.0f;
+    const float max_timer = 27.0f;
+    const float min_timer = 0.0f;
     const int table_max_x = 150, table_min_x = 23,table_max_y = 77, table_min_y = 0;
-    const Vector4 barreiras = {table_max_x,table_max_y,table_min_x,table_min_y};
-    InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 1.7.7.7");
-    
+    /* Vector4 barreiras: {min_x, max_x, min_y, max_y} */
+    const Vector4 barreiras = {table_min_x, table_max_x, table_min_y, table_max_y};
+    int pecas_mortasj1=0;
+    int pecas_mortasj2=0;
 
-    
+    InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 1.7.7.9");
+        
     Image main_image = LoadImage("/home/devcontainers/dev/Pif_Jogo/teste.png"); 
     pecas *jogador1 = allocar_memoria(quant_pecasj1);
     //Image table= {"/home/devcontainers/dev/Pif_Jogo/00_2c5cd.webp",screenWidth,screenHeight,1,"RGB"};
@@ -62,17 +64,16 @@ int main(void){
     
     int time_jogando = 1;
              
-    
     SetTargetFPS(fps);               
     //--------------------------------------------------------------------------------------
     // Main game loop
     while (!WindowShouldClose()){ 
-    
-        
-    
-        // Update
-            timer +=GetFrameTime();
+        Jogar(&iniciar);
+        if (iniciar){
+        // Update           
 
+            timer +=GetFrameTime();
+        
             if (time_jogando!= -1)
                 loop_movimento(&control1,quant_pecasj1); 
             else
@@ -97,57 +98,78 @@ int main(void){
                      
             int reverse_boundary = 1;
             if (time_jogando == 1){
-                if (((coordenadas_peca.x) < table_min_x || (coordenadas_peca.x > table_max_x))  ||  (((coordenadas_peca.y < table_min_y) || (coordenadas_peca.y) > table_max_y)) ) 
+                if (fora_barreiras(coordenadas_peca.x, coordenadas_peca.y, barreiras))
                     reverse_boundary = -1;
-                
                 jogador1[control1].isDame = virar_rainha(jogador1,control1,barreiras);
-                ataque_pecas(jogador1,jogador2,control1,quant_pecasj1);
-                if (desabilitar_peca(jogador1,control1))
+                pecas_mortasj2+=ataque_pecas(jogador1,jogador2,control1,quant_pecasj1,time_jogando);
+                if (desabilitar_peca(jogador1,control1)){
                     movimentopecas(jogador1,control1,reverse_boundary,jogador1[control1].isDame);
+                    barrar_posicao(jogador1, control1, barreiras);
+                }
                 colisao_pecas(jogador1,jogador2,coordenadas_peca,control1,quant_pecasj1);
-
-            }
-            else{
-                if (((coordenadas_peca2.x) <  table_min_x || (coordenadas_peca2.x > table_max_x)) || ((coordenadas_peca2.y) < table_min_y || (coordenadas_peca2.y > table_max_y)) )
+            }else{
+                if (fora_barreiras(coordenadas_peca2.x, coordenadas_peca2.y, barreiras))
                     reverse_boundary = -1;
                 jogador2[control2].isDame = virar_rainha(jogador2,control2,barreiras);
-                ataque_pecas(jogador2,jogador1,control2,quant_pecasj2);
-                if(desabilitar_peca(jogador2,control2))
+                pecas_mortasj1+=ataque_pecas(jogador2,jogador1,control2,quant_pecasj2,time_jogando);
+                if(desabilitar_peca(jogador2,control2)){
                     movimentopecas(jogador2,control2,reverse_boundary,jogador2[control2].isDame);
+                    barrar_posicao(jogador2, control2, barreiras);
+                }
                 colisao_pecas(jogador2,jogador1,coordenadas_peca2,control2,quant_pecasj2);
-                
-            }           
+            }       
+            if (pecas_mortasj1==quant_pecasj1 || pecas_mortasj2==quant_pecasj2){
+                Vector2 perdas = {pecas_mortasj1,pecas_mortasj2};
+                vencedor(jogador1,jogador2,quant_pecasj1,perdas);
+            }    
+        }
             
         //}
         //----------------------------------------------------------------------------------
         
         // Draw
         BeginDrawing();
-
+            
             ClearBackground(RAYWHITE);
             //DrawTexture(tabuleiro[num_textures], table_max_x, table_min_y , BLACK);
             
-            for(int u_c = 0;u_c<quant_pecasj1;u_c++){
-                DrawRectangle(wall_distance*(jogador1[u_c].px), wall_distance*(jogador1[u_c].py),width_print,height_print,BLACK);
-                DrawText(TextFormat("%c %d",jogador1[u_c].pecas_jogador, u_c), wall_distance*jogador1[u_c].px, wall_distance*jogador1[u_c].py, height_print, WHITE);
-            }
-            for(int u_c2=0;u_c2<quant_pecasj2;u_c2++){
-                DrawRectangle(wall_distance*(jogador2[u_c2].px),wall_distance*(jogador2[u_c2].py),width_print,height_print,DARKGRAY);
-                DrawText(TextFormat("%c %d",jogador2[u_c2].pecas_jogador, u_c2), wall_distance*jogador2[u_c2].px, wall_distance*jogador2[u_c2].py, height_print, WHITE);
-            }
+            if (iniciar){
+                 for(int u_c = 0;u_c<quant_pecasj1;u_c++){
+                    DrawRectangle(wall_distance*(jogador1[u_c].px), wall_distance*(jogador1[u_c].py),width_print,height_print,BLACK);
+                    DrawText(TextFormat("%c %d",jogador1[u_c].pecas_jogador, u_c), wall_distance*jogador1[u_c].px, wall_distance*jogador1[u_c].py, height_print, WHITE);
+                }
+                for(int u_c2=0;u_c2<quant_pecasj2;u_c2++){
+                    DrawRectangle(wall_distance*(jogador2[u_c2].px),wall_distance*(jogador2[u_c2].py),width_print,height_print,DARKGRAY);
+                    DrawText(TextFormat("%c %d",jogador2[u_c2].pecas_jogador, u_c2), wall_distance*jogador2[u_c2].px, wall_distance*jogador2[u_c2].py, height_print, WHITE);
+                }
             
-            DrawText("Digite a peça que você quer, depois use o teclado para mover. Selecione T para dar a vez ao outro jogador", 0, 30, 15, BLACK);
-            DrawText(TextFormat("tempo: %.1f, time %d",timer,time_jogando),0,140,15,BLACK);
-            DrawText(TextFormat("Peca %d: time: %d, x= %.1f, y=%.1f",control1,1,jogador1[control1].px,jogador1[control1].py),0,90,15,BLACK);
-            if (time_jogando == -1)
-                DrawText("Jogador 2!",0,290,15,BLACK);
-            if (time_jogando == 1)
-                DrawText("Jogador 1!",0,290,15,BLACK);
+                DrawText("Digite a peça que você quer, depois use o teclado para mover. Selecione T para dar a vez ao outro jogador", 0, 30, 15, BLACK);
+                DrawText(TextFormat("tempo: %.1f, time %d",timer,time_jogando),0,140,15,BLACK);
+                DrawText(TextFormat("Peca %d: time: %d, x= %.1f, y=%.1f",control1,1,jogador1[control1].px,jogador1[control1].py),0,90,15,BLACK);
+                if (time_jogando == -1)
+                    DrawText("Jogador 2!",0,290,15,BLACK);
+                if (time_jogando == 1)
+                    DrawText("Jogador 1!",0,290,15,BLACK);
 
-            DrawText(TextFormat("Peca %d: time: %d, x= %.1f, y=%.1f",control2,-1,jogador2[control2].px,jogador2[control2].py),0,150,15,BLACK);
-            EndDrawing();
+                DrawText(TextFormat("Peca %d: time: %d, x= %.1f, y=%.1f",control2,-1,jogador2[control2].px,jogador2[control2].py),0,150,15,BLACK);
+                EndDrawing();
+        }
         //----------------------------------------------------------------------------------
-        }   
+            else{
+                 DrawText("Bem vindo ao Malloc(Draughts)!",21,15,30,BLACK);
+                 DrawText("Versão: 1.7.7.9",21,47,20,BLACK);
+
+                 DrawText("Aperte enter para começar o jogo",56,390,20,BLACK);
+
+                 EndDrawing(); 
+            }
+
+
+
+
+        
+        
+        }
         //----------------------------------------------------------------------------------
 
     // De-Initialization

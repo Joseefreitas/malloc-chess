@@ -5,7 +5,12 @@
 #include <utilis.h>
 #include "math_game.h"
     
- const int wall_distance = 5;
+const int wall_distance = 5;
+
+void Jogar(int * valor){
+    if (IsKeyPressed(KEY_ENTER))
+        *valor = 1;
+}
 
 int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i){
     Vector4 jogadores_coord = {jogador1[unity_control].px,jogador1[unity_control].py,jogador2[i].px,jogador2[i].py};    
@@ -16,22 +21,41 @@ int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pe
             return 0;
 }       
 
-int desabilitar_peca(pecas *jogador,int quant_pecas){
-    if (jogador[quant_pecas].vida == 0)
+int desabilitar_peca(pecas *jogador,int posicao){
+    if (jogador[posicao].vida == 0)
             return 0;
     return 1;
 }
 
 int virar_rainha(pecas *jogador1,int unity_control, Vector4 barreiras){
-    if  (jogador1[unity_control].py > barreiras.y || jogador1[unity_control].py < barreiras.w){
-        jogador1[unity_control].pecas_jogador = 'D';
-        jogador1[unity_control].vida= 2*(jogador1[unity_control].vida);
-        jogador1[unity_control].isDame+= jogador1[unity_control].isDame;
-        /*jogador1[unity_control].defesa =  20;
-        jogador1[unity_control].ataque  = 40;*/
-        return 2;
+    /*const int table_max_x = 150, table_min_x = 23,table_max_y = 77, table_min_y = 0;
+    const Vector4 barreiras = {table_max_x,table_max_y,table_min_x,table_min_y};*/
+//        if  (jogador1[unity_control].py > barreiras.y || jogador1[unity_control].py < barreiras.w){
+//     const Vector4 barreiras = {table_min_x, table_max_x, table_min_y, table_max_y};
+
+
+    if (jogador1[unity_control].py >= barreiras.w || jogador1[unity_control].py <= barreiras.z){
+        if (IsKeyDown(KEY_R)){
+            jogador1[unity_control].pecas_jogador = 'D';
+            jogador1[unity_control].vida = jogador1[unity_control].vida * 2;
+            jogador1[unity_control].isDame = 2;
+        }
+        return jogador1[unity_control].isDame;
     }
-    return 1;
+    return jogador1[unity_control].isDame;
+}
+
+int fora_barreiras(float px, float py, Vector4 barreiras){
+    if (px < barreiras.x || px > barreiras.y || py < barreiras.z || py > barreiras.w)
+        return 1;
+    return 0;
+}
+
+void barrar_posicao(pecas *jogador, int unity_control, Vector4 barreiras){
+    if (jogador[unity_control].px < barreiras.x) jogador[unity_control].px = barreiras.x;
+    if (jogador[unity_control].px > barreiras.y) jogador[unity_control].px = barreiras.y;
+    if (jogador[unity_control].py < barreiras.z) jogador[unity_control].py = barreiras.z;
+    if (jogador[unity_control].py > barreiras.w) jogador[unity_control].py = barreiras.w;
 }
 
 pecas *allocar_memoria(int quantidade){
@@ -61,20 +85,27 @@ void movimentopecas(pecas *jogador, int unity_control, int reverse_border, int I
 }
 
 int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas){
+   
     Vector2 posic_mouse_convertida = {posic_mouse.x / (float)wall_distance, posic_mouse.y / (float)wall_distance};   
     int alvo = -1;
-    float menor_distancia = 0.25 * (float)wall_distance;
+    float menor_distancia = 0.25f * (float)wall_distance;
+    Vector2 atacante = {jogador1[unity_control].px, jogador1[unity_control].py};
     for(int i = 0; i < quant_pecas; i++){
         if (jogador2[i].vida > 0){
             Vector4 distancia_matar = {jogador2[i].px, jogador2[i].py, posic_mouse_convertida.x, posic_mouse_convertida.y};
-            if(distance_2_points(distancia_matar) < menor_distancia){
-                alvo = i;
-                menor_distancia = distance_2_points(distancia_matar);
+            float clique_alvo = distance_2_points(distancia_matar);
+            if (clique_alvo<menor_distancia){          
+                Vector4 jogadores = {atacante.x,atacante.y,jogador2[i].px,jogador2[i].py};
+                if(distance_2_points(jogadores)<= 10.5){
+                    alvo = i;
+                    menor_distancia = distance_2_points(jogadores);
+                }
             }
         }
     }
     if(alvo != -1){
-        if(jogador1[unity_control].px-jogador2[alvo].px<2.8 || jogador1[unity_control].py-jogador2[alvo].py<2.8){
+        //DrawText("Possivel atacar",30,BLACK);
+        if(jogador1[unity_control].px-jogador2[alvo].px<6.8 && jogador1[unity_control].py-jogador2[alvo].py<6.8){
             jogador2[alvo].px = -99;
             jogador2[alvo].py = -99;
             jogador2[alvo].vida = 0;
@@ -85,9 +116,7 @@ int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_
     return 0;
 }
 
-//so posso permitir 1 ataque per turno. mas, pela algoritmo, ainda é possível afetar mais de uma. mas tá bem melhor agora
-
-int ataque_pecas(pecas *jogador1, pecas*jogador2, int unity_control, int quant_pecas){
+int ataque_pecas(pecas *jogador1, pecas*jogador2, int unity_control, int quant_pecas, int time_jogando){
     Vector2 posicao = GetMousePosition();
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && 
        ((posicao.x) != ((float)wall_distance*jogador1[unity_control].px) && 
@@ -96,8 +125,10 @@ int ataque_pecas(pecas *jogador1, pecas*jogador2, int unity_control, int quant_p
         DrawText(TextFormat("Tentativa de ataque em: x= %.1f, y=%.1f", 
                  posicao.x/(float)wall_distance, posicao.y/(float)wall_distance), 
                  10, 190, 15, BLACK);
-        return matar_peca(posicao, jogador1, jogador2, unity_control, quant_pecas);
+        int morto = matar_peca(posicao, jogador1, jogador2, unity_control, quant_pecas);
+        return morto;
     }
+    return 0;
 }
 
 void setpecas(pecas *jogador,int time, int quant_pecas){
@@ -122,12 +153,13 @@ void setpecas(pecas *jogador,int time, int quant_pecas){
     }
 }
 
-void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int unity_control,int quant_pecas ){
+void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int unity_control,int quant_pecas){
     for(int i = 0;i<quant_pecas;i++){ 
         if((pos_ocupada(jogador1, jogador2, unity_control,quant_pecas,i)) ){
             jogador1[unity_control].px = dados_anteriores.x;
             jogador1[unity_control].py = dados_anteriores.y;
         }
+
     } 
 }
 
@@ -140,22 +172,22 @@ void loop_movimento(int *unity_control, int quant_pecas){
     }
 }
 
-void vencedor(pecas *jogador1, pecas *jogador2, int quant_pecas1,int quant_pecas2){
-    int cont1=0, cont2=0;
-    for(int i1=0;i1<quant_pecas1;i1++){
-        cont1+=desabilitar_peca(jogador1,i1);   
-    }
+void liberar_pecas(pecas* jogador){
+    free(jogador);
+}
 
-    for(int i2=0;i2<quant_pecas2;i2++){
-        cont2+=desabilitar_peca(jogador2,i2);
-    }
 
-    if (cont1==0 && cont2!=0){
-        DrawText(TextFormat("Jogador2 venceu!"),50,25,90,BLACK);
-    }else if (cont2==0 && cont1!=0){
-        DrawText(TextFormat("Jogador1 venceu!"),50,25,90,BLACK);
+void vencedor(pecas *jogador1, pecas *jogador2, int quant_pecas1,Vector2 perdas){
+    if ((perdas.x>=0 && perdas.x<quant_pecas1) && perdas.y!=0){
+        DrawText(TextFormat("Jogador2 venceu!"),50,50,90,BLACK);
+    }else if ((perdas.y>=0 && perdas.y<quant_pecas1) && perdas.x!=0){
+        DrawText(TextFormat("Jogador1 venceu!"),50,50,90,BLACK);
     }else{
         DrawText(TextFormat("Empate!"),50,25,90,BLACK);
     }
+    liberar_pecas(jogador1);
+    liberar_pecas(jogador2);
+    DrawText(TextFormat("Pressione ESC para salvar e encerrar"),90,25,30,BLACK);
 
 }
+
