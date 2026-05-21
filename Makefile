@@ -1,10 +1,9 @@
-# Compiler and flags
 CC = gcc
-CFLAGS = -I include/raylib/src
-LDLFILES = -L.
-LDLIBS = -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+CFLAGS = -I./functions -I./raylib/raylib/src
+LDLIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
-#project name
-PROJ_NAME = pif-game
+pif_game: pif_game.c functions/utilis.c functions/math_game.c functions/tabuleiro.c functions/constants.c
+	$(CC) $^ -o $@ $(CFLAGS) $(LDLIBS)
 
-gcc pif_game.c functions/utilis.c functions/math_game.c -o pif_game -I ./functions -I./raylib/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game
+clean:
+	rm -f pif_game

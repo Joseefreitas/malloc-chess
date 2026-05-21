@@ -6,6 +6,7 @@
 #include "functions/math_game.h"
 #include "functions/pecas.h"
 #include "functions/utilis.h"
+#include "functions/tabuleiro.h"
 //#include "functions/placar.h"
 //#include "functions/funcoes_placar.h"
 #define power2(A) ((A)*(A))
@@ -38,7 +39,7 @@ int main(void){
     */
 
     UnloadImage(main_image);
-       
+    
 
     //Texture tabuleiro[num_textures]= {};
     //tabuleiro[num_textures] = LoadTextureFromImage(main_image);
@@ -80,14 +81,14 @@ int main(void){
     
             Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
             Vector2 coordenadas_peca2={jogador2[control2].px,jogador2[control2].py};
-           
+        
 
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         
                 /* Definr os limites de movimento, de forma manual para as peças aqui*/
         // Make sure Box B does not go out of move area limits
-                     
+            
             int reverse_boundary = 1;
             if (time_jogando == 1){
                 if (fora_barreiras(coordenadas_peca.x, coordenadas_peca.y, barreiras))
@@ -125,12 +126,13 @@ int main(void){
         
         // Draw
         BeginDrawing();
-            
-            ClearBackground(RAYWHITE);
+        
+        ClearBackground(RAYWHITE);
+        desenhar_tabuleiro();
             //DrawTexture(tabuleiro[num_textures], table_max_x, table_min_y , BLACK);
             
             if (iniciar){
-                 for(int u_c = 0;u_c<quant_pecasj1;u_c++){
+                for(int u_c = 0;u_c<quant_pecasj1;u_c++){
                     DrawRectangle(wall_distance*(jogador1[u_c].px), wall_distance*(jogador1[u_c].py),width_print,height_print,BLACK);
                     DrawText(TextFormat("%c %d",jogador1[u_c].pecas_jogador, u_c), wall_distance*jogador1[u_c].px, wall_distance*jogador1[u_c].py, height_print, WHITE);
                 }
@@ -152,12 +154,12 @@ int main(void){
         }
         //----------------------------------------------------------------------------------
             else{
-                 DrawText("Bem vindo ao Malloc(Draughts)!",21,15,30,BLACK);
-                 DrawText("Versão: 1.7.7.9",21,47,20,BLACK);
+                DrawText("Bem vindo ao Malloc(Draughts)!",21,15,30,BLACK);
+                DrawText("Versão: 1.7.7.9",21,47,20,BLACK);
 
-                 DrawText("Aperte enter para começar o jogo",56,390,20,BLACK);
+                DrawText("Aperte enter para começar o jogo",56,390,20,BLACK);
 
-                 EndDrawing(); 
+                EndDrawing(); 
             }       
         }
         //----------------------------------------------------------------------------------
