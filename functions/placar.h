@@ -4,7 +4,6 @@
 
 typedef struct placar{
     int numero;
-    char pecas_jogador;
     struct placar *proximo;
 }placar;
 

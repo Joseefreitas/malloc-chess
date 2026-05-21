@@ -5,6 +5,8 @@
 
 void Jogar(int *valor);
 
+int pos_ocupada_mesmo_time(pecas *jogador1,int unity_control, int quant_pecas, int i);
+
 int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i);
 
 int desabilitar_peca(pecas *jogador,int posicao);

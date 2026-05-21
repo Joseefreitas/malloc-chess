@@ -13,6 +13,15 @@ void Jogar(int * valor){
         *valor = 1;
 }
 
+int pos_ocupada_mesmo_time(pecas *jogador1,int unity_control, int quant_pecas, int i){
+    Vector4 jogadores_coord = {jogador1[unity_control].px,jogador1[unity_control].py,jogador1[i].px,jogador1[i].py};    
+    float valor = distance_2_points(jogadores_coord);
+    if (valor>0.5 && valor<=7)
+            return 1;
+    else
+            return 0;
+}       
+
 int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i){
     Vector4 jogadores_coord = {jogador1[unity_control].px,jogador1[unity_control].py,jogador2[i].px,jogador2[i].py};    
     float valor = distance_2_points(jogadores_coord);
@@ -112,6 +121,7 @@ int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_
 }
 
 int ataque_pecas(pecas *jogador1, pecas*jogador2, int unity_control, int quant_pecas, int time_jogando){
+    
     Vector2 posicao = GetMousePosition();
     if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && 
        ((posicao.x) != ((float)wall_distance*jogador1[unity_control].px) && 
@@ -148,9 +158,11 @@ void setpecas(pecas *jogador,int time, int quant_pecas){
     }
 }
 
+
 void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int unity_control,int quant_pecas){
-    for(int i = 0;i<quant_pecas;i++){ 
-        if((pos_ocupada(jogador1, jogador2, unity_control,quant_pecas,i)) ){
+    for(int i = 0;i<quant_pecas;i++){
+
+        if( (pos_ocupada_mesmo_time(jogador1, unity_control,quant_pecas,i)) || (pos_ocupada(jogador1, jogador2, unity_control,quant_pecas,i)) ){
             jogador1[unity_control].px = dados_anteriores.x;
             jogador1[unity_control].py = dados_anteriores.y;
         }
@@ -169,8 +181,8 @@ void loop_movimento(int *unity_control, int quant_pecas){
 
 void liberar_pecas(pecas* jogador){
     free(jogador);
+    jogador=NULL;   
 }
-
 
 void vencedor(pecas *jogador1, pecas *jogador2, int quant_pecas1,Vector2 perdas){
     if ((perdas.x>=0 && perdas.x<quant_pecas1) && perdas.y!=0){
@@ -178,11 +190,10 @@ void vencedor(pecas *jogador1, pecas *jogador2, int quant_pecas1,Vector2 perdas)
     }else if ((perdas.y>=0 && perdas.y<quant_pecas1) && perdas.x!=0){
         DrawText(TextFormat("Jogador1 venceu!"),50,50,90,BLACK);
     }else{
-        DrawText(TextFormat("Empate!"),50,25,90,BLACK);
+        DrawText(TextFormat("Empate!"),50,50,90,BLACK);
     }
+    DrawText(TextFormat("Pressione ESC para salvar e encerrar"),90,165,30,BLACK);
     liberar_pecas(jogador1);
     liberar_pecas(jogador2);
-    DrawText(TextFormat("Pressione ESC para salvar e encerrar"),90,25,30,BLACK);
-
 }
 

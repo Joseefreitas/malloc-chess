@@ -1,11 +1,12 @@
-/*#ifndef MEU_PLACAR_H
+/*
+#ifndef MEU_PLACAR_H
 #define MEU_PLACAR_H
 #include <stdio.h>
 #include <stdlib.h>
 #include "raylib.h"
 #include "placar.h"
 #include "pecas.h"
-
+#include <utilis.h>
 
 placar *allocar_placar(int quantidade);
 void iniciar_placar(placar **head,int quant_pecas, pecas* jogador);

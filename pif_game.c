@@ -8,9 +8,12 @@
 #include "functions/utilis.h"
 //#include "functions/placar.h"
 //#include "functions/funcoes_placar.h"
-
 #define power2(A) ((A)*(A))
 
+
+    int iniciar = 0;
+    int pecas_mortasj1=0;
+    int pecas_mortasj2=0;
 int main(void){
     //ChangeDirectory(GetApplicationDirectory());
     // Initialization
@@ -19,7 +22,7 @@ int main(void){
         
     Image main_image = LoadImage("/home/devcontainers/dev/Pif_Jogo/teste.png"); 
     pecas *jogador1 = allocar_memoria(quant_pecasj1);
-    //Image table= {"/home/devcontainers/dev/Pif_Jogo/00_2c5cd.webp",screenWidth,screenHeight,1,"RGB"};
+    Image table= {"/home/devcontainers/dev/Pif_Jogo/00_2c5cd.webp",screenWidth,screenHeight,1,"RGB"};
     setpecas(jogador1,1,quant_pecasj1);
     pecas *jogador2 = allocar_memoria(quant_pecasj2);
     setpecas(jogador2,-1,quant_pecasj2);
@@ -37,17 +40,20 @@ int main(void){
     UnloadImage(main_image);
        
 
-    Texture tabuleiro[num_textures]= {};
-    tabuleiro[num_textures] = LoadTextureFromImage(main_image);
+    //Texture tabuleiro[num_textures]= {};
+    //tabuleiro[num_textures] = LoadTextureFromImage(main_image);
     
     int time_jogando = 1; 
     InitAudioDevice();
+    
     Music musica_tema =  LoadMusicStream("synprez-2026_05_20-21_38_02.wav");
-    float volume = 2.0f;
+    Sound Death_effect = LoadSound("WhatsApp-Ptt-2026-05-21-at-16.00.57.wav");  
+    float volume = 0.8f;
     PlayMusicStream(musica_tema);
-
+    
     SetMusicVolume(musica_tema, volume);
-
+    //SetSoundVolume(Death_effect,volume);
+    //PlaySound(Death_effect);
     SetTargetFPS(fps);              
     //
     //--------------------------------------------------------------------------------------
@@ -59,7 +65,7 @@ int main(void){
         // Update 
             timer +=GetFrameTime();            
             UpdateMusicStream(musica_tema);
-
+            //UpdateSound(Death_effect);
             if (time_jogando!= -1)
                 loop_movimento(&control1,quant_pecasj1); 
             else
@@ -85,9 +91,11 @@ int main(void){
             int reverse_boundary = 1;
             if (time_jogando == 1){
                 if (fora_barreiras(coordenadas_peca.x, coordenadas_peca.y, barreiras))
-                    reverse_boundary = -1;
+                    reverse_boundary = -0.5;
                 jogador1[control1].isDame = virar_rainha(jogador1,control1,barreiras);
                 pecas_mortasj2+=ataque_pecas(jogador1,jogador2,control1,quant_pecasj1,time_jogando);
+                PlaySound(Death_effect);
+
                 if (desabilitar_peca(jogador1,control1)){
                     movimentopecas(jogador1,control1,reverse_boundary,jogador1[control1].isDame);
                     barrar_posicao(jogador1, control1, barreiras);
@@ -95,9 +103,11 @@ int main(void){
                 colisao_pecas(jogador1,jogador2,coordenadas_peca,control1,quant_pecasj1);
             }else{
                 if (fora_barreiras(coordenadas_peca2.x, coordenadas_peca2.y, barreiras))
-                    reverse_boundary = -1;
+                    reverse_boundary = -0.5;
                 jogador2[control2].isDame = virar_rainha(jogador2,control2,barreiras);
                 pecas_mortasj1+=ataque_pecas(jogador2,jogador1,control2,quant_pecasj2,time_jogando);
+                PlaySound(Death_effect);
+
                 if(desabilitar_peca(jogador2,control2)){
                     movimentopecas(jogador2,control2,reverse_boundary,jogador2[control2].isDame);
                     barrar_posicao(jogador2, control2, barreiras);
@@ -154,9 +164,10 @@ int main(void){
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    UnloadSound(Death_effect); 
     UnloadMusicStream(musica_tema); 
     CloseAudioDevice();   
-    UnloadTexture(tabuleiro[num_textures]);
+    //UnloadTexture(tabuleiro[num_textures]);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
