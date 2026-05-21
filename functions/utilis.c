@@ -4,8 +4,9 @@
 #include "pecas.h"
 #include <utilis.h>
 #include "math_game.h"
-    
-const int wall_distance = 5;
+#include "constants.h"
+
+//const int wall_distance = 5;
 
 void Jogar(int * valor){
     if (IsKeyPressed(KEY_ENTER))
@@ -28,12 +29,6 @@ int desabilitar_peca(pecas *jogador,int posicao){
 }
 
 int virar_rainha(pecas *jogador1,int unity_control, Vector4 barreiras){
-    /*const int table_max_x = 150, table_min_x = 23,table_max_y = 77, table_min_y = 0;
-    const Vector4 barreiras = {table_max_x,table_max_y,table_min_x,table_min_y};*/
-//        if  (jogador1[unity_control].py > barreiras.y || jogador1[unity_control].py < barreiras.w){
-//     const Vector4 barreiras = {table_min_x, table_max_x, table_min_y, table_max_y};
-
-
     if (jogador1[unity_control].py >= barreiras.w || jogador1[unity_control].py <= barreiras.z){
         if (IsKeyDown(KEY_R)){
             jogador1[unity_control].pecas_jogador = 'D';
