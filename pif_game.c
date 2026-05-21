@@ -12,9 +12,7 @@
 #define power2(A) ((A)*(A))
 
 
-    int iniciar = 0;
-    int pecas_mortasj1=0;
-    int pecas_mortasj2=0;
+
 int main(void){
     //ChangeDirectory(GetApplicationDirectory());
     // Initialization
