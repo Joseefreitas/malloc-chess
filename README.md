@@ -12,6 +12,7 @@ sudo apt install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libx
 
 pra compilar com tudo ajustado:
 
-gcc pif_game.c functions/utilis.c functions/math_game.c functions/constants.c -o pif_game -I ./functions -I./raylib/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game
+gcc pif_game.c functions/utilis.c functions/math_game.c functions/constants.c functions/tabuleiro.c -o pif_game -I ./functions -I./raylib/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game
 
 
+gcc pif_game.c functions/utilis.c functions/math_game.c functions/constants.c functions/tabuleiro.c functions/funcoes_placar.c functions/funcoes_salvar_pontuacao.c -o pif_game -I ./functions -I./raylib/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game

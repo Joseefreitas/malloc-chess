@@ -1,9 +1,30 @@
 CC = gcc
-CFLAGS = -I./functions -I./raylib/raylib/src
+
+# Fontes e objetos
+SRCS = pif_game.c $(wildcard functions/*.c)
+OBJS = $(SRCS:.c=.o)
+
+# Flags
+CFLAGS = -I./functions -I./raylib/raylib/src -Wall -O2
+LDFLAGS = -L.
 LDLIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
-pif_game: pif_game.c functions/utilis.c functions/math_game.c functions/tabuleiro.c functions/constants.c
-	$(CC) $^ -o $@ $(CFLAGS) $(LDLIBS)
+TARGET = pif_game
+
+.PHONY: all clean run rebuild
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) $(LDLIBS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	./$(TARGET)
+
+rebuild: clean all
 
 clean:
-	rm -f pif_game
+	rm -f $(OBJS) $(TARGET)

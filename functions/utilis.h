@@ -2,11 +2,12 @@
 #define MEU_JOGO_H 
 #include "pecas.h"
 #include "raylib.h"
+#include "placar.h"
 
-void Jogar(int *valor);
-
+void Jogar(double *valor);
+/*
 int pos_ocupada_mesmo_time(pecas *jogador1,int unity_control, int quant_pecas, int i);
-
+*/
 int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pecas, int i);
 
 int desabilitar_peca(pecas *jogador,int posicao);
@@ -19,7 +20,7 @@ void barrar_posicao(pecas *jogador, int unity_control, Vector4 barreiras);
 
 pecas *allocar_memoria(int quantidade);
 
-void movimentopecas(pecas *jogador, int unity_control, int reverse_border, int IsDame);
+int movimentopecas(pecas *jogador, int unity_control, int reverse_border, int IsDame);
 
 int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas);
 
@@ -31,6 +32,6 @@ void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int
 
 void loop_movimento(int *unity_control, int quant_pecas);
 
-void vencedor(pecas *jogador1, pecas *jogador2, int quant_pecas1,Vector2 perdas);
+void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas,placar **head1,placar **head2, double *iniciar);
 
 #endif

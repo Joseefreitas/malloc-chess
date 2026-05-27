@@ -1,19 +1,14 @@
-/*
-#ifndef MEU_PLACAR_H
-#define MEU_PLACAR_H
-#include <stdio.h>
-#include <stdlib.h>
-#include "raylib.h"
-#include "placar.h"
+#ifndef FUNCOES_PLACAR_H
+#define FUNCOES_PLACAR_H
 #include "pecas.h"
-#include <utilis.h>
+#include "placar.h"
 
-placar *allocar_placar(int quantidade);
-void iniciar_placar(placar **head,int quant_pecas, pecas* jogador);
-//void adicionar_lista(placar **head,int );
-void remover_peca(placar **head, int posicao, pecas* jogador);
 
-void mostrar_placar(placar *head);
+placar *allocar_placar();
+void iniciar_placar(placar **head,int quant_pecas);
+
+void adicionar_lista(placar **head,int pecas);
+void mostrar_placar(placar **head1, placar **head2);
+void liberar_placar(placar **head1, placar **head2);
+
 #endif
-
-*/
