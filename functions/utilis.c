@@ -31,7 +31,7 @@ int pos_ocupada(pecas *jogador1, pecas *jogador2,int unity_control, int quant_pe
     Vector4 jogadores_entresi = {jogador1[unity_control].px,jogador1[unity_control].py,jogador1[i].px,jogador1[i].py};    
     float valor_dif = distance_2_points(jogadores_coord);
     float valor_mesmo = distance_2_points(jogadores_entresi);
-    if (valor_mesmo>=0.2 && valor_mesmo<=8 || valor_dif>=0.2 && valor_dif<=8)
+    if ((valor_mesmo>=0.3 && valor_mesmo<=9) || (valor_dif>=0.3 && valor_dif<=9))
             return 1;
     else
             return 0;
@@ -44,22 +44,37 @@ int desabilitar_peca(pecas *jogador,int posicao){
 }
 
 int virar_rainha(pecas *jogador1,int unity_control, Vector4 barreiras){
-    if (jogador1[unity_control].py >= barreiras.w || jogador1[unity_control].py <= barreiras.z){
-        if (IsKeyDown(KEY_R)){
-            jogador1[unity_control].pecas_jogador = 'D';
-            jogador1[unity_control].vida = jogador1[unity_control].vida * 2;
-            jogador1[unity_control].isDame = 2;
+    //if (jogador1[unity_control].py >= barreiras.w || jogador1[unity_control].py <= barreiras.z){
+    float limite = 27.0f;
+    float y_conv = jogador1[unity_control].py;
+    if (jogador1[unity_control].time==1){
+        if ((y_conv<=barreiras.w && barreiras.w-y_conv<=limite)){
+            if (IsKeyPressed(KEY_R)){
+                jogador1[unity_control].pecas_jogador = 'D';
+                jogador1[unity_control].vida = jogador1[unity_control].vida * 2;
+                jogador1[unity_control].isDame = 2;
+            }
         }
         return jogador1[unity_control].isDame;
+    }else{
+        if ((y_conv>=barreiras.z &&  y_conv-barreiras.z<=limite)){    
+            if (IsKeyPressed(KEY_R)){
+                jogador1[unity_control].pecas_jogador = 'D';
+                jogador1[unity_control].vida = jogador1[unity_control].vida * 2;
+                jogador1[unity_control].isDame = 2;
+            }
+            return jogador1[unity_control].isDame;
+        }
     }
     return jogador1[unity_control].isDame;
 }
+   
 
 int fora_barreiras(float px, float py, Vector4 barreiras){
     if (px < barreiras.x || px > barreiras.y || py < barreiras.z || py > barreiras.w)
         return 1;
     return 0;
-}
+ }
 
 void barrar_posicao(pecas *jogador, int unity_control, Vector4 barreiras){
     if (jogador[unity_control].px < barreiras.x) jogador[unity_control].px = barreiras.x;
@@ -74,6 +89,7 @@ pecas *allocar_memoria(int quantidade){
         return NULL;
     return aux;
 }
+
 /*
 const float passo_grade = 25.0f * (float)IsDame;
     Vector2 mouse = GetMousePosition();
@@ -150,10 +166,10 @@ void movimentopecas (pecas *jogador, int unity_control, int reverse_border,int I
 */
 
 int movimentopecas (pecas *jogador, int unity_control, int reverse_border,int IsDame){       
-        int cont =0;
+        int cont=0;
         if (IsKeyPressed(KEY_RIGHT)){
-                            float px_movimento = jogador[unity_control].px + (25.0*reverse_border*IsDame);
-                            float py_movimento = jogador[unity_control].py + (25.0*reverse_border*IsDame);
+                            float px_movimento = jogador[unity_control].px + (passo*reverse_border*IsDame);
+                            float py_movimento = jogador[unity_control].py + (passo*reverse_border*IsDame);
                             if (!fora_barreiras(px_movimento,py_movimento,barreiras)){
                                 jogador[unity_control].px = px_movimento;
                                 jogador[unity_control].py = py_movimento;
@@ -161,8 +177,8 @@ int movimentopecas (pecas *jogador, int unity_control, int reverse_border,int Is
                         }
                     }
         else if (IsKeyPressed(KEY_LEFT)){   
-                            float px_movimento = jogador[unity_control].px - (25.0*reverse_border*IsDame);
-                            float py_movimento = jogador[unity_control].py - (25.0*reverse_border*IsDame);
+                            float px_movimento = jogador[unity_control].px - (passo*reverse_border*IsDame);
+                            float py_movimento = jogador[unity_control].py - (passo*reverse_border*IsDame);
                             if (!fora_barreiras(px_movimento,py_movimento,barreiras)){
                                 jogador[unity_control].px = px_movimento;
                                 jogador[unity_control].py = py_movimento;
@@ -170,8 +186,8 @@ int movimentopecas (pecas *jogador, int unity_control, int reverse_border,int Is
                         }
                     }
         else if (IsKeyPressed(KEY_UP)){
-                            float px_movimento = jogador[unity_control].px + (25.0*reverse_border*IsDame);
-                            float py_movimento = jogador[unity_control].py - (25.0*reverse_border*IsDame);
+                            float px_movimento = jogador[unity_control].px + (passo*reverse_border*IsDame);
+                            float py_movimento = jogador[unity_control].py - (passo*reverse_border*IsDame);
                             if (!fora_barreiras(px_movimento,py_movimento,barreiras)){
                                 jogador[unity_control].px = px_movimento;
                                 jogador[unity_control].py = py_movimento;
@@ -179,8 +195,8 @@ int movimentopecas (pecas *jogador, int unity_control, int reverse_border,int Is
                         }
                     }
         else if (IsKeyPressed(KEY_DOWN)){
-                            float px_movimento = jogador[unity_control].px - (25.0*reverse_border*IsDame);
-                            float py_movimento = jogador[unity_control].py + (25.0*reverse_border*IsDame);
+                            float px_movimento = jogador[unity_control].px - (passo*reverse_border*IsDame);
+                            float py_movimento = jogador[unity_control].py + (passo*reverse_border*IsDame);
                             if (!fora_barreiras(px_movimento,py_movimento,barreiras)){
                                 jogador[unity_control].px = px_movimento;
                                 jogador[unity_control].py = py_movimento;
@@ -189,7 +205,6 @@ int movimentopecas (pecas *jogador, int unity_control, int reverse_border,int Is
                     }
         return cont;                    
        }
-
 
 /*
 int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas){
@@ -319,33 +334,39 @@ int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_
     return 1;
 }
 /*/
+
 int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_control, int quant_pecas){
    
     Vector2 posic_mouse_convertida = {posic_mouse.x / (float)wall_distance, posic_mouse.y / (float)wall_distance};   
-    int alvo = -1;
-    float menor_distancia = (float)wall_distance * (float)wall_distance;
+    int indice = -1;
+    //float menor_distancia = (float)wall_distance * (float)wall_distance;
     Vector2 atacante = {jogador1[unity_control].px, jogador1[unity_control].py};
     for(int i = 0; i < quant_pecas; i++){
         if (jogador2[i].vida > 0 && jogador1[i].vida>0){        
-            Vector4 distancia_matar = {jogador2[i].px, jogador2[i].py, posic_mouse_convertida.x, posic_mouse_convertida.y};
-            float clique_alvo = distance_2_points(distancia_matar);
-            Vector4 jogadores = {atacante.x,atacante.y,jogador2[i].px,jogador2[i].py};
+            Vector2 alvo = {jogador2[i].px, jogador2[i].py};
+
+            Vector4 jogadores = {atacante.x,atacante.y,alvo.x,alvo.y};
             float dist_jog = distance_2_points(jogadores);
-                if(dist_jog<1.2 && clique_alvo>0 && clique_alvo<=2.0){
-                    jogador2[i].px = -99;
-                    jogador2[i].py = -99;
-                    jogador2[i].vida = 0;
-                    jogador2[i].pecas_jogador = 'X';
-                    return 1;
+            if (dist_jog>=15.5 && dist_jog<60.0){
+                Vector4 distancia_matar = {jogador2[i].px, jogador2[i].py, posic_mouse_convertida.x, posic_mouse_convertida.y};
+                float clique_alvo = distance_2_points(distancia_matar);
+                
+                if((clique_alvo>=0.03 && clique_alvo<=0.9)){
+                    indice = i;     
                 }
-                else{DrawText("Não é possivel atacar",850,180,30,BLACK);}
-            }
+                else{DrawText("Não é possível atacar",850,180,30,BLACK);}
+                }
+         }
+    }
+        if (indice!=-1){
+            jogador2[indice].px = -99;
+            jogador2[indice].py = -99;
+            jogador2[indice].vida = 0;
+            jogador2[indice].pecas_jogador = 'X';
+            return 1;
         }
     return 0;
-    }
-
-   
-/**/
+}
 
 int ataque_pecas(pecas *jogador1, pecas*jogador2, int unity_control, int quant_pecas, int time_jogando){    
     Vector2 posicao = GetMousePosition();
@@ -362,8 +383,6 @@ int ataque_pecas(pecas *jogador1, pecas*jogador2, int unity_control, int quant_p
     return 0;
 }
 
-/**/
-
 void setpecas(pecas *jogador,int time, int quant_pecas){
 if (iniciar!=1.0){    
     for(int i=0;i<quant_pecas;i++){
@@ -377,7 +396,7 @@ if (iniciar!=1.0){
             /*jogador[i].defesa =  5;
             jogador[i].ataque  = 20;*/
         }
-        jogador[i].px = (25.0) * ((i<=(quant_pecas/2)-1) ? i+0.55: i-((quant_pecas/2)) +0.487  );
+        jogador[i].px = (25.0) * ((i<=(quant_pecas/2)-1) ? i+0.54: i-((quant_pecas/2)) +0.487  );
         if (time ==1)
             jogador[i].py = (5.1) * (((i<=(quant_pecas/2)-1)? 0.5 : 8.0));
         else
@@ -415,9 +434,9 @@ void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas, placar **head1,pl
     *iniciar = 0.5;
     char resultado[90];
     if ((perdas.x>=0 && perdas.x<quant_pecasj1) && perdas.y!=0){
-        strcpy(resultado," Jogador1 venceu!");
-    }else if ((perdas.y>=0 && perdas.y<quant_pecasj1) && perdas.x!=0){
         strcpy(resultado," Jogador2 venceu!");
+    }else if ((perdas.y>=0 && perdas.y<quant_pecasj1) && perdas.x!=0){
+        strcpy(resultado," Jogador1 venceu!");
     }
     //DrawText(TextFormat("%s",resultado),850,350,30,BLACK);
     if (IsKeyPressed(KEY_ENTER)){        
@@ -434,10 +453,10 @@ void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas, placar **head1,pl
         criar_arquivo("Pif_Jogo-pontuacoes.txt");
         inserir_texto_arquivo("Pif_Jogo-pontuacoes.txt",texto);
         
-        /*liberar_pecas(jogador1);
+        liberar_pecas(jogador1);
         liberar_pecas(jogador2);
         liberar_placar(head1,head2);
-        */
+        
         //CloseWindow();
     }
 }

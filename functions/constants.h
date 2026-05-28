@@ -16,6 +16,8 @@ extern const int vida;
 extern const int fps;
 extern const int num_textures;
 extern double iniciar;
+
+extern const float passo;
 extern const float max_timer;
 extern const float min_timer;
 extern const int table_max_x, table_min_x, table_max_y, table_min_y;

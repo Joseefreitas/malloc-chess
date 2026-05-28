@@ -1,4 +1,4 @@
 Jogador 1: 5.000000 Jogador 2: 0.000000  Jogador1 venceu!
 Jogador 1: 12.000000 Jogador 2: 0.000000  Jogador1 venceu!
 Jogador 1: 12.000000 Jogador 2: 0.000000  Jogador1 venceu!
-Jogador 1: 12.000000 Jogador 2: 0.000000  Jogador2 venceu!
+Jogador 1: 12.000000 Jogador 2: 0.000000  Jogador1 venceu!

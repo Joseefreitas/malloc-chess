@@ -3,7 +3,6 @@
 #include "raylib.h"
 #include <string.h>
 #include <math.h>
-
 #include "functions/constants.h"
 #include "functions/math_game.h"
 #include "functions/pecas.h"
@@ -12,13 +11,9 @@
 #include "functions/placar.h"
 #include "functions/funcoes_placar.h"
 #include "functions/funcoes_salvar_pontuacao.h"
-
 #define power2(A) ((A)*(A))
 
-
-
 int main(void){
-    //ChangeDirectory(GetApplicationDirectory());
     // Initialization
     //--------------------------------------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 1.7.8.9");
@@ -47,29 +42,24 @@ int main(void){
     adicionar_lista(&placar_jogo2,pecas_vivasj1);
     UnloadImage(main_image);
     
-
-    //Texture tabuleiro[num_textures]= {};
-    //tabuleiro[num_textures] = LoadTextureFromImage(main_image);
-    
     int time_jogando = 1; 
-    //InitAudioDevice();
+    InitAudioDevice();
     
-    //Music musica_tema =  LoadMusicStream("/home/devcontainers/dev/Pif_Jogo/assets/music/synprez-2026_05_24-12_58_23.wav");
-    //float volume = 0.6f;
-    //PlayMusicStream(musica_tema);
+    Music musica_tema =  LoadMusicStream("/home/devcontainers/dev/Pif_Jogo/assets/music/bensound-glitchtones (1).mp3");
+    float volume = 0.6f;
+    PlayMusicStream(musica_tema);
     
-    //SetMusicVolume(musica_tema, volume);
+    SetMusicVolume(musica_tema, volume);
     SetTargetFPS(fps);              
-    //
+    
     //--------------------------------------------------------------------------------------
     // Main game loop
-    while (!WindowShouldClose()){ 
-        
+    while (!WindowShouldClose()){    
         Jogar(&iniciar);
         if (iniciar){
         // Update 
             timer +=GetFrameTime();            
-            //UpdateMusicStream(musica_tema);
+            UpdateMusicStream(musica_tema);
 
             if (time_jogando!= -1)
                 loop_movimento(&control1,quant_pecasj1); 
@@ -89,13 +79,7 @@ int main(void){
             Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
             Vector2 coordenadas_peca2={jogador2[control2].px,jogador2[control2].py};
         
-
         //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        
-                /* Definr os limites de movimento, de forma manual para as peças aqui*/
-        // Make sure Box B does not go out of move area limits
-            
             float reverse_boundary = 1.0;
             if (time_jogando == 1){
                 if (fora_barreiras(coordenadas_peca.x, coordenadas_peca.y, barreiras))
@@ -105,9 +89,9 @@ int main(void){
                 adicionar_lista(&placar_jogo1,pecas_vivasj2);
 
                 if (desabilitar_peca(jogador1,control1)){
+                    barrar_posicao(jogador1, control1, barreiras);
                     if (contador_movimentoj1<jogador1[control1].isDame)
                         contador_movimentoj1 += movimentopecas(jogador1,control1,reverse_boundary,jogador1[control1].isDame);
-                    barrar_posicao(jogador1, control1, barreiras);
                 }
                 contador_movimentosj2=0;
                 colisao_pecas(jogador1,jogador2,coordenadas_peca,control1,quant_pecasj1);
@@ -119,10 +103,10 @@ int main(void){
                 adicionar_lista(&placar_jogo2,pecas_vivasj1);
 
                 if(desabilitar_peca(jogador2,control2)){
-                   
+                    barrar_posicao(jogador2, control2, barreiras);
                     if (contador_movimentosj2<jogador2[control2].isDame)
                         contador_movimentosj2+=  movimentopecas(jogador2,control2,reverse_boundary,jogador2[control2].isDame);
-                     barrar_posicao(jogador2, control2, barreiras);
+                    
                 }
                 contador_movimentoj1=0;
                 colisao_pecas(jogador2,jogador1,coordenadas_peca2,control2,quant_pecasj2);
@@ -140,9 +124,7 @@ int main(void){
         // Draw
         BeginDrawing();
         
-        ClearBackground(RAYWHITE);
-            //DrawTexture(tabuleiro[num_textures], table_max_x, table_min_y , BLACK);
-            
+        ClearBackground(RAYWHITE);            
             if (iniciar==1.0){
                 desenhar_tabuleiro();
                 for(int u_c = 0;u_c<quant_pecasj1;u_c++){
@@ -196,10 +178,9 @@ int main(void){
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    //UnloadMusicStream(musica_tema); 
-    //CloseAudioDevice();   
-    //UnloadTexture(tabuleiro[num_textures]);
-    CloseWindow();        // Close window and OpenGL context
+    UnloadMusicStream(musica_tema); 
+    CloseAudioDevice();   
+    CloseWindow();        
     //--------------------------------------------------------------------------------------
 
     return 0;
