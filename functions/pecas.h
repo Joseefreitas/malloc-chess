@@ -6,9 +6,6 @@ typedef struct {
     float px;
     float py;
     int vida;
-/*    int defesa;
-    int ataque;
-    */
     int time;
     int isDame;
 } pecas;

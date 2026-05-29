@@ -66,15 +66,11 @@ int main(void){
             else
                 loop_movimento(&control2,quant_pecasj2);
 
-            if (timer> max_timer ||IsKeyDown(KEY_T)){
+            if (timer> max_timer|| IsKeyPressed(KEY_T)){
                 contador_turnos++;
                 time_jogando = -(time_jogando);
                 timer = min_timer;
                 
-            }
-            if (IsKeyPressed(KEY_A)){
-                mostrar_texto_arquivo("Pif_Jogo-pontuacoes.txt",quant_pecasj2,linhas_placar,pontuacoes_salvas);
-                iniciar = 0.5;
             }
             Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
             Vector2 coordenadas_peca2={jogador2[control2].px,jogador2[control2].py};
@@ -118,7 +114,7 @@ int main(void){
             }    
         }
             
-        //}
+       
         //----------------------------------------------------------------------------------
         
         // Draw
@@ -137,15 +133,16 @@ int main(void){
                 }
                 mostrar_placar(&placar_jogo1,&placar_jogo2);
                 
-                DrawText(TextFormat("Tempo: %.1f, Vez do jogador %d",timer,time_jogando),850,150,20,BLACK);
-                DrawText(TextFormat("Peca %d: time: %d, x= %.1f, y=%.1f",control1,1,jogador1[control1].px,jogador1[control1].py),0,90,15,BLACK);
                 if (time_jogando == -1){
                     DrawText(TextFormat("Tempo: %.1f, Vez do jogador 2",timer),850,150,20,BLACK);
-                }
-                if (time_jogando == 1)
-                    DrawText(TextFormat("Tempo: %.1f, Vez do jogador 1",timer),850,150,20,BLACK);
+                    DrawText(TextFormat("Peca selecionada %d",control2),850,180,20,BLACK);
 
-                DrawText(TextFormat("Peca %d: time: %d, x= %.1f, y=%.1f",control2,2,jogador2[control2].px,jogador2[control2].py),0,150,15,BLACK);
+                }
+                if (time_jogando == 1){
+                    DrawText(TextFormat("Tempo: %.1f, Vez do jogador 1",timer),850,150,20,BLACK);
+                    DrawText(TextFormat("Peca selecionada %d ",control1),850,180,20,BLACK);
+                }
+                
                 EndDrawing();
             }else{
                 if (iniciar!=0.5){
@@ -155,7 +152,6 @@ int main(void){
                     EndDrawing();
                 }else{
                     DrawText("Fim de Jogo\nPressione Enter para salvar e ESC para encerrar",10,10,30,BLACK);
-                    //DrawText(TextFormat("Pressione Enter para salvar e ESC para encerrar"),0,91,20,BLACK);
                     DrawText("Desenvolvedores: ",100,570,20,BLACK);
                     DrawText("JOSE EDUARDO BARBOSA DE FREITAS - Código, Animações e Tabuleiro",100,595,20,BLACK);  
                     DrawText("NÍCOLAS VITOR GOMES - Código ",100,615,20,BLACK);  
