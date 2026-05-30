@@ -44,11 +44,17 @@ git clone https://github.com/Joseefreitas/malloc-draughts.git
 cd malloc-draughts
 ```
  
-**2. Adicione o Raylib dentro da pasta do projeto:**
+**2. Adicione o Raylib dentro da pasta do projeto :**
+  **Somente para WSL**
+ Primeiro, acesse o site de Raylib: https://www.raylib.com/
  
-```bash
-git clone https://github.com/educ8s/Intro-To-raylib-Tutorial.git
-```
+ Nele, vá para área que está escrito "Download"
+
+ <img width="1053" height="262" alt="image" src="https://github.com/user-attachments/assets/77c16966-df46-460f-970e-3cb15a6a20d3" />
+
+Aperte Download, e siga o processo de instalação
+
+Depois de terminar o download, é necessário mover a pasta baixada para dentro da pasta do jogo
  
 ---
  
