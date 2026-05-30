@@ -47,7 +47,7 @@ cd malloc-draughts
 **2. Adicione o Raylib dentro da pasta do projeto:**
  
 ```bash
-git clone https://github.com/raysan5/raylib.git raylib
+git clone https://github.com/educ8s/Intro-To-raylib-Tutorial.git
 ```
  
 ---
