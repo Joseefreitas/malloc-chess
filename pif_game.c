@@ -121,7 +121,7 @@ int main(void){
         // Draw
         BeginDrawing();
         
-        ClearBackground(RAYWHITE);            
+        ClearBackground(BLACK);            
             if (iniciar==1.0){
                 desenhar_tabuleiro();
                 for(int u_c = 0;u_c<quant_pecasj1;u_c++){
@@ -136,16 +136,16 @@ int main(void){
                 EndDrawing();
             }else{
                 if (iniciar!=0.5){
-                    DrawText("Bem vindo ao Malloc(Draughts)!",21,15,30,BLACK);
-                    DrawText("Versão: 1.7.8.9",21,47,20,BLACK);
-                    DrawText("Aperte enter para começar o jogo",56,390,20,BLACK);
+                    DrawText("Bem vindo ao Malloc(Draughts)!",21,15,30,WHITE);
+                    DrawText("Versão: 1.7.8.9",21,47,20,WHITE);
+                    DrawText("Aperte enter para começar o jogo",56,390,20,WHITE);
                     EndDrawing();
                 }else{
-                    DrawText("Fim de Jogo\nPressione Enter para salvar e ESC para encerrar",10,10,30,BLACK);
-                    DrawText("Desenvolvedores: ",100,570,20,BLACK);
-                    DrawText("JOSE EDUARDO BARBOSA DE FREITAS - Código, Animações e Tabuleiro",100,595,20,BLACK);  
-                    DrawText("NÍCOLAS VITOR GOMES - Código ",100,615,20,BLACK);  
-                    DrawText("RENATO AUGUSTO SOARES DA SILVA - Código",100,645,20,BLACK);  
+                    DrawText("Fim de Jogo\nPressione Enter para salvar e ESC para encerrar",10,10,30,WHITE);
+                    DrawText("Desenvolvedores: ",100,570,20,WHITE);
+                    DrawText("JOSE EDUARDO BARBOSA DE FREITAS - Código, Animações e Tabuleiro",100,595,20,WHITE);  
+                    DrawText("NÍCOLAS VITOR GOMES - Código ",100,615,20,WHITE);  
+                    DrawText("RENATO AUGUSTO SOARES DA SILVA - Código",100,645,20,WHITE);  
                     
                     
                     DrawText("Placar (Quantas pecas de cada jogador continuaram vivas): ",300,90,20,BLACK);
