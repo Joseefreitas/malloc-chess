@@ -1,41 +1,69 @@
-# malloc-draughts
-
-Nossa proposta foi recriar- do nosso jeito- o clássico jogo de Damas, com elementos prórpios e algumas coisas novas.
-Utilizamos mecânicas e estilos de jogos antigos, misturados com elementos contemporâneos de execução e funcionamento.
-
-
-## Bugs resolvidos:
-  Sistema de movimentação pouco-responsivo e movendo em direções proibidas [resolvido];
-  
-  Sistema de ataque com alcançe sem limites [resolvido];
-
-  Montagem do tabuleiro [resolvido];
-
-  Sistema visual limitado a tabelas de espacamento parecidos [resolvidos];
-
-  Sistema de Rainha não responsivo [resolvido];
-
-  Sistema de audio não funcional [resolvido];
-  
-## Gameplay:
-  -(link)
-
-
-##### O jogo somente pode ser executado via Linux (Seja Linux/WSL no Windows).
-De preferência utilize a distribuição Ubuntu,
-
-##### O primeiro passo para compilar é copiar o repositório git:
-        git clone https://github.com/Joseefreitas/malloc-draughts.git
-
-### Adicionar o Raylib na pasta do arquivo (Dentro da pasta do jogo):
-     git clone https://github.com/raysan5/raylib.git raylib
-     
-### Para rodar na máquina Linux, primeiro instale as seguintes dependências:
-    sudo apt update
-    sudo apt install -y build-essential git cmake
-    sudo apt install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
-
-### Para Rodar o jogo, em máquina Linux, existem 2 formas que podem ser utilizadas para compilar o jogo: 
-    `gcc pif_game.c -o pif_game -I include/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game`
--  Ou, via MakeFile:
-      `make run`
+# malloc-draughts 👑
+ 
+> Uma releitura do clássico jogo de Damas — com identidade própria.
+ 
+**malloc-draughts** recria o jogo de Damas combinando mecânicas tradicionais com elementos contemporâneos: sistema de Rainha reformulado, áudio integrado e uma experiência visual renovada. Desenvolvido em C com [Raylib](https://www.raylib.com/), como projeto da disciplina PIF.
+ 
+---
+ 
+## Demonstração
+ 
+> 🎥 [Game play no youtube](#)
+ 
+---
+ 
+## Funcionalidades
+ 
+-  Movimentação responsiva e validada por direção
+-  Sistema de Rainha funcional
+-  Sistema de captura com alcance controlado
+-  Áudio integrado
+-  Tabuleiro renderizado com Raylib
+---
+ 
+## Pré-requisitos
+ 
+> ⚠️ **O jogo roda apenas em Linux** (ou WSL no Windows).
+ 
+Instale as dependências necessárias:
+ 
+```bash
+sudo apt update
+sudo apt install -y build-essential git cmake
+sudo apt install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
+```
+ 
+---
+ 
+## Instalação
+ 
+**1. Clone o repositório:**
+ 
+```bash
+git clone https://github.com/Joseefreitas/malloc-draughts.git
+cd malloc-draughts
+```
+ 
+**2. Adicione o Raylib dentro da pasta do projeto:**
+ 
+```bash
+git clone https://github.com/raysan5/raylib.git raylib
+```
+ 
+---
+ 
+## Como compilar e rodar
+ 
+**Via Makefile (recomendado):**
+ 
+```bash
+make run
+```
+ 
+**Ou manualmente com GCC:**
+ 
+```bash
+gcc pif_game.c -o pif_game -I include/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 && ./pif_game
+```
+ 
+---
