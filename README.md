@@ -63,7 +63,7 @@ make run
 **Ou manualmente com GCC:**
  
 ```bash
-gcc pif_game.c -o pif_game -I include/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 && ./pif_game
+gcc pif_game.c functions/utilis.c functions/math_game.c functions/tabuleiro.c functions/constants.c functions/funcoes_placar.c functions/funcoes_salvar_pontuacao.c functions/hud.c -o pif_game -I ./functions -I./raylib/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game
 ```
  
 ---
