@@ -3,6 +3,18 @@
 Nossa proposta foi recriar- do nosso jeito- o clássico jogo de Damas, com elementos prórpios e algumas coisas novas.
 Utilizamos mecânicas e estilos de jogos antigos, misturados com elementos contemporâneos de execução e funcionamento.
 
+
+## Bugs resolvidos:
+  Sistema de movimentação pouco-responsivo e movendo em direções proibidas [resolvido];
+  
+  Sistema de ataque com alcançe sem limites [resolvido];
+
+  Montagem do tabuleiro [resolvido];
+
+  Sistema de Rainha não responsivo [resolvido];
+
+  Sistema de audio não funcional [resolvido];
+  
 ## Gameplay:
   -(link)
 
