@@ -8,7 +8,6 @@ placar *allocar_placar();
 void iniciar_placar(placar **head,int quant_pecas);
 
 void adicionar_lista(placar **head,int pecas);
-void mostrar_placar(placar **head1, placar **head2);
 void liberar_placar(placar **head1, placar **head2);
 
 #endif

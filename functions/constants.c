@@ -16,7 +16,7 @@ const int num_textures = 0;
 double iniciar = 0.0;
 
 const float passo = 27.0f;
-const float max_timer = 7.0f;
+const float max_timer = 25.0f;
 const float min_timer = 0.0f;
 const int table_max_x = 150, table_min_x = 0, table_max_y = 150, table_min_y = 0;
 const Vector4 barreiras = {table_min_x, table_max_x, table_min_y, table_max_y};

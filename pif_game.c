@@ -11,6 +11,7 @@
 #include "functions/placar.h"
 #include "functions/funcoes_placar.h"
 #include "functions/funcoes_salvar_pontuacao.h"
+#include "functions/hud.h"
 #define power2(A) ((A)*(A))
 
 int main(void){
@@ -18,9 +19,7 @@ int main(void){
     //--------------------------------------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 1.7.8.9");
         
-    Image main_image = LoadImage("/home/devcontainers/dev/Pif_Jogo/teste.png"); 
     pecas *jogador1 = allocar_memoria(quant_pecasj1);
-
     setpecas(jogador1,1,quant_pecasj1);
     pecas *jogador2 = allocar_memoria(quant_pecasj2);
     setpecas(jogador2,-1,quant_pecasj2);
@@ -40,13 +39,12 @@ int main(void){
     memset(pontuacoes_salvas,0,sizeof(pontuacoes_salvas));
     adicionar_lista(&placar_jogo1,pecas_vivasj2);
     adicionar_lista(&placar_jogo2,pecas_vivasj1);
-    UnloadImage(main_image);
     
     int time_jogando = 1; 
     InitAudioDevice();
     
     Music musica_tema =  LoadMusicStream("/home/devcontainers/dev/Pif_Jogo/assets/music/bensound-glitchtones (1).mp3");
-    float volume = 0.6f;
+    float volume = 0.7f;
     PlayMusicStream(musica_tema);
     
     SetMusicVolume(musica_tema, volume);
@@ -71,7 +69,16 @@ int main(void){
                 time_jogando = -(time_jogando);
                 timer = min_timer;
                 
+
+            
             }
+            
+            if (IsKeyPressed(KEY_A)){
+                Vector2 perdas = {quant_pecasj1-pecas_vivasj1,quant_pecasj2-pecas_vivasj2};
+                vencedor(jogador1,jogador2,perdas,&placar_jogo1,&placar_jogo2,&iniciar);
+            }
+
+
             Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
             Vector2 coordenadas_peca2={jogador2[control2].px,jogador2[control2].py};
         
@@ -131,18 +138,7 @@ int main(void){
                     DrawRectangle(wall_distance*(jogador2[u_c2].px),wall_distance*(jogador2[u_c2].py),width_print,height_print,DARKGRAY);
                     DrawText(TextFormat("%c %d",jogador2[u_c2].pecas_jogador, u_c2), wall_distance*jogador2[u_c2].px, wall_distance*jogador2[u_c2].py, height_print, WHITE);
                 }
-                mostrar_placar(&placar_jogo1,&placar_jogo2);
-                
-                if (time_jogando == -1){
-                    DrawText(TextFormat("Tempo: %.1f, Vez do jogador 2",timer),850,150,20,BLACK);
-                    DrawText(TextFormat("Peca selecionada %d",control2),850,180,20,BLACK);
-
-                }
-                if (time_jogando == 1){
-                    DrawText(TextFormat("Tempo: %.1f, Vez do jogador 1",timer),850,150,20,BLACK);
-                    DrawText(TextFormat("Peca selecionada %d ",control1),850,180,20,BLACK);
-                }
-                
+                desenhar_hud(time_jogando,timer,&placar_jogo1,&placar_jogo2);
                 EndDrawing();
             }else{
                 if (iniciar!=0.5){

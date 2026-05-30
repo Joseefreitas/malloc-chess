@@ -31,14 +31,6 @@ void adicionar_lista(placar **head,int pecas){
         return;
     }
 
-void mostrar_placar(placar **head1, placar **head2){
-    placar *aux1 = *head1;
-    placar *aux2= *head2;
-    DrawText(TextFormat("Peças mortas pelo jogador 1 : %d",aux1->numero),3*280,60,20,BLACK);
-    DrawText(TextFormat("Peças mortas pelo jogador 2 : %d",aux2->numero),3*280,90,20,BLACK);
-        
-}
-
 void liberar_placar(placar **head1, placar **head2){
     placar *aux1 = *head1;
     placar *aux2= *head2;

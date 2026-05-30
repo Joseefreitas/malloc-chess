@@ -134,7 +134,7 @@ int matar_peca(Vector2 posic_mouse, pecas *jogador1, pecas *jogador2, int unity_
                 Vector4 distancia_matar = {jogador2[i].px, jogador2[i].py, posic_mouse_convertida.x, posic_mouse_convertida.y};
                 float clique_alvo = distance_2_points(distancia_matar);
                 
-                if((clique_alvo>=0.03 && clique_alvo<=0.9)){
+                if((clique_alvo>=0.03 && clique_alvo<=0.7)){
                     indice = i;     
                 }
                 else{DrawText("Não é possível atacar",850,180,30,BLACK);}
