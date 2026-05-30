@@ -3,6 +3,6 @@
 #include "placar.h"
 #include "raylib.h"
 
-void desenhar_hud(int time_jogando, float timer, placar **head1,placar **head2);
+void desenhar_hud(int time_jogando,int control1,int control2 ,float timer, placar **head1,placar **head2);
 
 #endif

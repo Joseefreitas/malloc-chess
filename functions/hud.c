@@ -3,7 +3,7 @@
 #include "funcoes_placar.h"
 #include "hud.h"
 
-void desenhar_hud(int time_jogando, float timer,placar **head1,placar **head2) {
+void desenhar_hud(int time_jogando,int control1,int control2, float timer,placar **head1,placar **head2) {
     int tabuleiro_fim = (GetScreenWidth() + 500) / 2;
     int hudX = tabuleiro_fim + 10;
     int hudY = (GetScreenHeight() - 410) / 2;
@@ -17,11 +17,14 @@ void desenhar_hud(int time_jogando, float timer,placar **head1,placar **head2) {
     DrawCircle(hudX + 50, hudY + 100, 25, BLACK);
     placar *aux1 = *head1;
     DrawText(TextFormat("J1: %d", aux1->numero), hudX + 90, hudY + 85, 22, WHITE);
+    DrawText(TextFormat("Peca usada: %d", control1), hudX + 90, hudY + 105, 22, WHITE);
+
 
     // peça  + pontos jogador 2
     DrawCircle(hudX + 50, hudY + 170, 25, GRAY);
     placar *aux2 = *head2;
     DrawText(TextFormat("J2: %d", aux2->numero), hudX + 90, hudY + 155, 22, WHITE);
+    DrawText(TextFormat("Peca usada: %d", control2), hudX + 90, hudY + 175, 22, WHITE);
 
     // separador
     DrawLine(hudX + 20, hudY + 220, hudX + 280, hudY + 220, WHITE);

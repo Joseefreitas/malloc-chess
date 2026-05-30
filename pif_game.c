@@ -17,7 +17,7 @@
 int main(void){
     // Initialization
     //--------------------------------------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 1.7.8.9");
+    InitWindow(screenWidth, screenHeight, "malloc(draughts): teste 2.0.0.0");
         
     pecas *jogador1 = allocar_memoria(quant_pecasj1);
     setpecas(jogador1,1,quant_pecasj1);
@@ -43,7 +43,7 @@ int main(void){
     int time_jogando = 1; 
     InitAudioDevice();
     
-    Music musica_tema =  LoadMusicStream("/home/devcontainers/dev/Pif_Jogo/assets/music/bensound-glitchtones (1).mp3");
+    Music musica_tema =  LoadMusicStream("assets/music/bensound-glitchtones (1).mp3");
     float volume = 0.7f;
     PlayMusicStream(musica_tema);
     
@@ -68,9 +68,6 @@ int main(void){
                 contador_turnos++;
                 time_jogando = -(time_jogando);
                 timer = min_timer;
-                
-
-            
             }
             
             Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
@@ -132,12 +129,12 @@ int main(void){
                     DrawRectangle(wall_distance*(jogador2[u_c2].px),wall_distance*(jogador2[u_c2].py),width_print,height_print,DARKGRAY);
                     DrawText(TextFormat("%c %d",jogador2[u_c2].pecas_jogador, u_c2), wall_distance*jogador2[u_c2].px, wall_distance*jogador2[u_c2].py, height_print, WHITE);
                 }
-                desenhar_hud(time_jogando,timer,&placar_jogo1,&placar_jogo2);
+                desenhar_hud(time_jogando,control1,control2,timer,&placar_jogo1,&placar_jogo2);
                 EndDrawing();
             }else{
                 if (iniciar!=0.5){
                     DrawText("Bem vindo ao Malloc(Draughts)!",21,15,30,WHITE);
-                    DrawText("Versão: 1.7.8.9",21,47,20,WHITE);
+                    DrawText("Versão: 2.0.0.0",21,47,20,WHITE);
                     DrawText("Aperte enter para começar o jogo",56,390,20,WHITE);
                     EndDrawing();
                 }else{
