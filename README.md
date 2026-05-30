@@ -39,3 +39,8 @@ De preferência utilize a distribuição Ubuntu,
     `gcc pif_game.c -o pif_game -I include/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game`
 -  Ou, via MakeFile:
       `make run`
+
+### Para Rodar o jogo, em máquina Linux, existem 2 formas que podem ser utilizadas para compilar o jogo: 
+    `gcc pif_game.c -o pif_game -I include/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game`
+-  Ou, via MakeFile:
+      `make run`
