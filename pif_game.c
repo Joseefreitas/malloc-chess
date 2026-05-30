@@ -145,9 +145,9 @@ int main(void){
                     DrawText("RENATO AUGUSTO SOARES DA SILVA - Código",100,645,20,WHITE);  
                     
                     
-                    DrawText("Placar (Quantas pecas de cada jogador continuaram vivas): ",300,90,20,BLACK);
+                    DrawText("Placar (Quantas pecas de cada jogador continuaram vivas): ",300,90,20,WHITE);
                     for(int i=0;i<quant_pecasj1;i++){
-                            DrawText(TextFormat("%s", pontuacoes_salvas[i]), 300,110+(20*i),20,BLACK);           
+                            DrawText(TextFormat("%s", pontuacoes_salvas[i]), 300,110+(20*i),20,WHITE);           
                     }
                     EndDrawing();
                 }                 
