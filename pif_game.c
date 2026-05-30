@@ -73,12 +73,6 @@ int main(void){
             
             }
             
-            if (IsKeyPressed(KEY_A)){
-                Vector2 perdas = {quant_pecasj1-pecas_vivasj1,quant_pecasj2-pecas_vivasj2};
-                vencedor(jogador1,jogador2,perdas,&placar_jogo1,&placar_jogo2,&iniciar);
-            }
-
-
             Vector2 coordenadas_peca={jogador1[control1].px,jogador1[control1].py};
             Vector2 coordenadas_peca2={jogador2[control2].px,jogador2[control2].py};
         
