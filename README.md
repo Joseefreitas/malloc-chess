@@ -55,21 +55,25 @@ cd malloc-draughts
 Aperte Download, e siga o processo de instalação
 
 Depois de terminar o download, é necessário mover a pasta baixada para dentro da pasta do jogo
+
+Depois de colocar a pasta do raylib dentro da pasta do jogo precisa instalar as dependencias novamente
+
+"
+sudo apt update
+sudo apt install -y build-essential git cmake
+sudo apt install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
+ "
+para garantir que não tenha falhas
  
 ----
  
 ## Como compilar e rodar
  
 **Via Makefile (recomendado):**
- 
+ dentro da pasta do jogo
 ```bash
 make run
 ```
- 
-**Ou manualmente com GCC:**
- 
-```bash
-gcc pif_game.c functions/utilis.c functions/math_game.c functions/tabuleiro.c functions/constants.c functions/funcoes_placar.c functions/funcoes_salvar_pontuacao.c functions/hud.c -o pif_game -I ./functions -I./raylib/raylib/src -L. -lraylib -lGL -lm -lpthread -ldl -lrt -lX11  && ./pif_game
-```
- 
-----
+ pode demorar um pouco para compilar
+
+ ----
