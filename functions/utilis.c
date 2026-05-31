@@ -211,7 +211,7 @@ void liberar_pecas(pecas* jogador){
     jogador=NULL;   
 }
 
-void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas, placar **head1,placar **head2,double *iniciar){
+void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas,double *iniciar){
     *iniciar = 0.5;
     char resultado[90];
     if ((perdas.x>=0 && perdas.x<quant_pecasj1) && perdas.y!=0){

@@ -106,8 +106,8 @@ int main(void){
                 colisao_pecas(jogador2,jogador1,coordenadas_peca2,control2,quant_pecasj2);
             }       
             if (pecas_vivasj1==quant_pecasj1 || pecas_vivasj2==quant_pecasj2){
-                Vector2 perdas = {quant_pecasj1-pecas_vivasj1,quant_pecasj2-pecas_vivasj2};
-                vencedor(jogador1,jogador2,perdas,&placar_jogo1,&placar_jogo2,&iniciar);
+                Vector2 perdas = {(placar_jogo1->numero),(placar_jogo2->numero)};
+                vencedor(jogador1,jogador2,perdas,&iniciar);
                 mostrar_texto_arquivo("Pif_Jogo-pontuacoes.txt",quant_pecasj2,linhas_placar,pontuacoes_salvas);
             }    
         }

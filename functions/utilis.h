@@ -30,6 +30,6 @@ void colisao_pecas(pecas *jogador1, pecas *jogador2,Vector2 dados_anteriores,int
 
 void loop_movimento(int *unity_control, int quant_pecas);
 
-void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas,placar **head1,placar **head2, double *iniciar);
+void vencedor(pecas *jogador1, pecas *jogador2,Vector2 perdas, double *iniciar);
 
 #endif
