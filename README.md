@@ -23,7 +23,7 @@
  
 ## Pré-requisitos
  
-> ⚠️ **O jogo roda apenas em Linux** (ou WSL no Windows).
+> ⚠️ **O jogo roda somente em Linux** (ou WSL no Windows).
  
 Instale as dependências necessárias:
  
