@@ -56,14 +56,19 @@ Aperte Download, e siga o processo de instalação
 
 Depois de terminar o download, é necessário mover a pasta baixada para dentro da pasta do jogo
 
-Depois de colocar a pasta do raylib dentro da pasta do jogo precisa instalar as dependencias novamente
+Depois de colocar a pasta do raylib dentro da pasta do jogo precisa instalar as dependências novamente
+
+```bash
+code .
+```
+Na ide que você usa, instale as dependências
 
 ```bash
 sudo apt update
 sudo apt install -y build-essential git cmake
 sudo apt install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev
 ```
-para garantir que não tenha falhas
+Para garantir que não tenha falhas
  
 ----
  
